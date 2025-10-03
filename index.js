@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -9,9 +9,18 @@ import Contact from './Contact';
 import Footer from './Footer';
 import ErrorPage from './ErrorPage';
 import ListView from './ListView/ListView';
-import ListDetail from './ListView/ListDetail'
+import ListDetail from './ListView/ListDetail';
 
-class App extends Component {
+// Define all routes in one place
+const routes = [
+  { path: "/", exact: true, component: Home },
+  { path: "/about", component: About },
+  { path: "/contact", component: Contact },
+  { path: "/listview", component: ListView },
+  { path: "/listdetail/:id", component: ListDetail },
+];
+
+class App extends React.Component {
   render() {
     return (
       <Router>
@@ -19,15 +28,19 @@ class App extends Component {
           <Header />
           <div className="wrapper">
             <Switch>
-              <Route path={"/"} exact component={Home} />
-              <Route path={"/about"} component={About} />
-              <Route path={"/contact"} component={Contact} />
-              <Route path={"/listview"} component={ListView} />
-              <Route path={"/listdetail/:id"} component={ListDetail} />
+              {routes.map(({ path, exact, component }, idx) => (
+                <Route 
+                  key={idx} 
+                  path={path} 
+                  exact={exact} 
+                  component={component} 
+                />
+              ))}
+              {/* Fallback route */}
               <Route component={ErrorPage} />
             </Switch>
           </div>
-          
+          <Footer />
         </div>
       </Router>
     );
